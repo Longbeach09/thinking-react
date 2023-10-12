@@ -8,3 +8,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>,
 );
+//what this is doing is its taking id and rending our application in app
