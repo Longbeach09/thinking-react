@@ -12,9 +12,8 @@ const TEST_DATA = [
 
 function App() {
   return (
-    <>
    <InvoiceTable initialInvoiceData={TEST_DATA} />
-    </>
+    
   )  // my top level app is passing down the test data to invoce table
 }
 //and rendering invoce table

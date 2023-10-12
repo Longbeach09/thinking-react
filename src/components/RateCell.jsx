@@ -1,9 +1,13 @@
 import formatCurrecy from '../utils/formatCurrency'
 
-const RateCell = ({ isEditing, value }) => {
+const RateCell = ({ isEditing, value, onValueChange }) => {
   return isEditing ? (
     <td>
-        <input type= "text" value={formatCurrecy(value)}/>
+        <input 
+            type= "text" 
+            value={value}
+            onChange={(e) => onValueChange(e.target.value)}
+        />
     </td>
   ) : (
     <td>{formatCurrecy(value)}</td>

@@ -1,18 +1,18 @@
 
-const ModeButtons = ({isEditing}) => {
+const ModeButtons = ({isEditing, saveClick, editClick, funckyDelete}) => {
 
    
   return  isEditing ? (   //if is Editing is true return Save  
   // if false return Delete and edit the question mark and colon
     <td>
-        <button>Save</button>
+        <button onClick={saveClick}>Save</button>  
     </td>
 
      
   ) : ( 
     <td>
-    <button>Delete</button>
-    <button>Edit</button>
+    <button onClick={funckyDelete}>Delete</button>
+    <button onClick={editClick}>Edit</button>
     </td>
   
   )
