@@ -1,0 +1,49 @@
+import { useLoaderData } from "react-router-dom";
+import axios from 'axios';
+import React, {useState} from "react";
+const Profile = () => {
+  const { user } = useLoaderData();
+  const [deleteStatus, setDeleteStatus] = useState(null);
+  const handleDelete = () => {
+    // Prompt the user for confirmation
+    const confirmation = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+
+    if (confirmation) {
+      // Make an asynchronous request to your server to delete the account
+      axios
+        .delete("/api/deleteAccount", {
+        })
+        .then((response) => {
+          console.log("Account deleted successfully.");
+          setDeleteStatus("success");
+        })
+        .catch((error) => {
+          console.error("Error deleting account:", error);
+          // Handle errors or display error message
+          setDeleteStatus("error");
+        });
+    } else {
+      // If the user cancels, provide feedback or take appropriate action
+      console.log("Account deletion cancelled.");
+      // You may choose to redirect, show a message, etc.
+    }
+  };
+  return (
+    <>
+      <h1>Profile Page</h1>
+      <form>
+        <p>Username: {user.username}</p>
+        <p>Email: {user.email}</p>
+        <p>Password: {user.password}</p>
+        <button>Edit</button>
+        <button onClick={handleDelete}>Delete account</button>
+        {deleteStatus === "success" && <p>Account deleted successfully!</p>}
+        {deleteStatus === "error" && <p>Error deleting account. Please try again.</p>}
+      </form>
+    </>
+  );
+};
+
+export default Profile;

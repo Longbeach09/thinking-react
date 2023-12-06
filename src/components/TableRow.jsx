@@ -4,18 +4,35 @@ import RateCell from "./RateCell"
 import HoursCell from "./HoursCell"
 import formatCurrency from "../utils/formatCurrency"
 import { useState } from "react"
-
+import axios from "axios"
 
 
   // const {description, rate, hours } = initialInvoiceData
-const TableRow = ({initialIsEditing, initialInvoiceData, deleteFunc}) => {
+const TableRow = ({initialIsEditing, initialInvoiceData, deleteFunc, id}) => {
   
 const [editMode, setEditMode] = useState(initialIsEditing)
 const [description, setDescription] = useState(initialInvoiceData.description)
 const [hours, setHours] = useState(initialInvoiceData.hours)  //using usestate o
 const [rate, setRate] = useState(initialInvoiceData.rate)
 
-const changeNormalMode =() => setEditMode(false)
+const changeNormalMode = async() => {
+  //create new obj to send back (as the body) the cureent state vals of desc/rate/
+  
+  let bodyObj = {
+    description: description,
+    rate: rate,
+    hours: hours
+  }
+  const response = await axios.put(`/editInvoice/${id}`, bodyObj)
+
+  if (!response.data.error){
+    setEditMode(false)
+  } else {
+    alert("DONT PANICK BUT YOUR CODE IS BROKEN")
+  }
+}
+
+
 const changeEditMode = () => setEditMode (true)
 
   return (

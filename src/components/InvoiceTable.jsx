@@ -7,6 +7,9 @@ import TableHeader from './TableHeader';
 import AddButton from './AddButton'
 import TableRow from './TableRow'
 import { useState } from 'react';
+import axios from 'axios';
+
+
 
 let globalId = 4 
 
@@ -19,19 +22,28 @@ const InvoiceTable = ({initialInvoiceData}) => {
         //when we map over the invoice data each item is a object now
         const { id, description, rate, hours, isEditing} = invoiceItem
 //invouce item is just a name
-        return id > 3 ? (
-            <TableRow
+return (
+    <TableRow
                 key={id}
+                id={id}
                 initialInvoiceData={{description, rate, hours}}  //same as description: description, rate:, rate    
-                initialIsEditing={true}
+                initialIsEditing={isEditing}
                 deleteFunc={() => deleteRow(id)}
                 />
-                ) : ( <TableRow
-                    key={id}
-                    initialInvoiceData={{description, rate, hours, isEditing}}  //same as description: description, rate:, rate    
-                    initialIsEditing={false}
-                    deleteFunc={() => deleteRow(id)}
-                    />)
+)
+        // return id > 3 ? (
+        //     <TableRow
+        //         key={id}
+        //         initialInvoiceData={{description, rate, hours}}  //same as description: description, rate:, rate    
+        //         initialIsEditing={true}
+        //         deleteFunc={() => deleteRow(id)}
+        //         />
+        //         ) : ( <TableRow
+        //             key={id}
+        //             initialInvoiceData={{description, rate, hours, isEditing}}  //same as description: description, rate:, rate    
+        //             initialIsEditing={false}
+        //             deleteFunc={() => deleteRow(id)}
+        //             />)
             })
               //then we return a table row component  makes all of the rows dynamic//
             //get the info from apps and destroctures them  and put them in there place
@@ -39,40 +51,29 @@ const InvoiceTable = ({initialInvoiceData}) => {
 
         //addRow function to pass to <addButton /> to give it the ability to adda snw ofject (row) to our currenData array
 
-    const addRow = () => {
-        //get copy of current data
-        const newInvoiceData =[...currentData]
+    const addRow = async() => {
 
-        // create a new "blank" object for the new roew (modeled after each element in TEST_DATA)
-        const newRow = {
-            id: globalId,
-            description: 'Description',
-            rate: '',
-            hours: '',
-            isEditing: true
-        }
-        //add newRow object to the end of our copy of currentData
-        newInvoiceData.push(newRow)
+         const response =  await axios.post('/addInvoice', {description: "Job Desription here"})
 
-        //call setCurrentData to change state of currentData
-        setCurrentData(newInvoiceData)
-
-        //all above(except newRow) can be done with this instead
-        //setCurrentData([...currentData, newRow])
-        globalId ++
+         setCurrentData([...currentData, response.data])
     }
 
     // delete function to pass to pass to <TableRow /> components
-    const deleteRow = (itemId) => {
+    const deleteRow =  async (itemId) => {
 
+        const response = await axios.delete(`/deleteInvoice/${itemId}`)
+
+        if (!response.data.error) { //if the response did not throw an error
+
+            const filteredList = currentData.filter((invoiceItem) => invoiceItem.id !== itemId)  
+            // the filter makes a new array and says if the invoiceItem doest = the item id itll be added
+     
+            setCurrentData(filteredList)
+     
+         } // it basically removes the one with the id or skips it 
+        }
         // using the given id ^, find the corresdpondinf element in current data and remove it
         
-       const filteredList = currentData.filter((invoiceItem) => invoiceItem.id !== itemId)  
-       // the filter makes a new array and says if the invoiceItem doest = the item id itll be added
-
-       setCurrentData(filteredList)
-
-    } // it basically removes the one with the id or skips it 
 
        
 
